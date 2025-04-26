@@ -1,4 +1,3 @@
-// app/book-summarizer/page.tsx
 'use client'
 
 import { useState } from 'react';
@@ -22,7 +21,6 @@ export default function BookSummarizer() {
     setSummary('');
     
     try {
-      // Direct call to Groq API from the client
       const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -35,7 +33,7 @@ export default function BookSummarizer() {
             role: 'user',
             content: `Provide a 200-300 word summary of "${title}" by ${author}. 
                       Cover main themes, key ideas, and why it's significant. 
-                      Use clear paragraphs.`
+                      Use clear paragraphs.remove the ** from the paragraph`
           }],
           temperature: 0.7,
           max_tokens: 1024
