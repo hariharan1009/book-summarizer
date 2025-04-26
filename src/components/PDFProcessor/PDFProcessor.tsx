@@ -1,175 +1,124 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { getDocument, GlobalWorkerOptions, version } from "pdfjs-dist";
-import { Groq } from "groq-sdk";
+import React, { useState } from "react";
+import * as pdfjsLib from "pdfjs-dist";
+import Groq from "groq-sdk";
 import styles from "./PDFProcessor.module.css";
 
-// Import worker directly (Webpack 5+ / Vite compatible)
-import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
-// Set worker path
-GlobalWorkerOptions.workerSrc = pdfjsWorker;
+import "pdfjs-dist/build/pdf.worker.min";
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
-export default function ResumeAnalyzer() {
-  const [groq, setGroq] = useState<Groq | null>(null);
-  const [resumeText, setResumeText] = useState<string>("");
-  const [jobDescription, setJobDescription] = useState<string>("");
-  const [analysis, setAnalysis] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+export default function PDFBookFinder() {
+  const [bookDetails, setBookDetails] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // Initialize services
-  useEffect(() => {
-    setGroq(
-      new Groq({
-        apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY,
-        dangerouslyAllowBrowser: true,
-      })
-    );
-  }, []);
+  const groq = new Groq({
+    apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY,
+    dangerouslyAllowBrowser: true,
+  });
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    try {
-      setLoading(true);
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
-      
-      let extractedText = "";
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-        extractedText += textContent.items
-          .map((item) => ("str" in item ? item.str : ""))
-          .join(" ")
-          .replace(/\s+/g, " ") // Normalize whitespace
-          .trim();
-        
-        if (i < pdf.numPages) extractedText += "\n\n";
-      }
+    setLoading(true);
+    setError("");
+    setBookDetails("");
 
-      setResumeText(extractedText);
-    } catch (error) {
-      console.error("PDF processing error:", error);
-      setResumeText("Error: Failed to process PDF file");
+    try {
+      const textContent = await extractTextFromPDF(file);
+      await analyzeTextForBooks(textContent);
+    } catch (err) {
+      console.error("Error processing PDF:", err);
+      setError("Failed to process PDF. Please try a different file.");
     } finally {
       setLoading(false);
     }
   };
 
-  async function analyzeResume() {
-    if (!resumeText || !jobDescription) {
-      alert("Please upload a resume and enter a job description");
-      return;
-    }
+  const extractTextFromPDF = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const pdfData = new Uint8Array(reader.result as ArrayBuffer);
+          const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+          let textContent = "";
 
-    if (!groq) {
-      alert("AI service is not ready yet");
-      return;
-    }
+          // Only process first 3 pages
+          const pagesToExtract = Math.min(pdf.numPages, 3);
+          
+          for (let i = 1; i <= pagesToExtract; i++) {
+            const page = await pdf.getPage(i);
+            const text = await page.getTextContent();
+            textContent += text.items
+              .map((item) => ("str" in item ? item.str : ""))
+              .join(" ");
+            textContent += "\n\n";
+          }
 
-    setLoading(true);
-    const prompt = `
-    Analyze this resume against the job description and provide specific recommendations:
-    
-    RESUME:
-    ${resumeText}
-    
-    JOB DESCRIPTION:
-    ${jobDescription}
-    
-    Provide:
-    1. Key skill matches
-    2. Missing qualifications
-    3. Specific improvement suggestions
-    4. Overall fit assessment`;
+          resolve(textContent);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
+    });
+  };
 
+  const analyzeTextForBooks = async (text: string) => {
     try {
+      // Truncate text if too long to avoid API limits
+      const truncatedText = text.length > 2000 ? text.substring(0, 2000) + "..." : text;
+      
       const response = await groq.chat.completions.create({
         messages: [
           {
             role: "system",
-            content: "You are a professional career coach. Provide detailed, actionable feedback in clear paragraphs. Focus on specific skills and qualifications.",
+            content: "You are a book detection assistant. Analyze the provided text and identify any mentioned books. For each book found, provide: 1.Book name, 2.Author, 3.description (1000 words), Format your response clearly with bullet points and ** without this."
           },
-          { role: "user", content: prompt },
+          {
+            role: "user",
+            content: `Please analyze this text and identify any books mentioned:\n\n${truncatedText}`
+          }
         ],
-        model: "mixtral-8x7b-32768",
-        temperature: 0.7,
+        model: "llama3-70b-8192",
+        max_tokens: 2000,
+        temperature: 0.3
       });
 
-      setAnalysis(response.choices[0]?.message?.content || "No analysis generated");
+      setBookDetails(response.choices[0]?.message?.content || "No books found in the document");
     } catch (error) {
-      console.error("AI analysis error:", error);
-      setAnalysis("Error: Failed to analyze resume");
-    } finally {
-      setLoading(false);
+      console.error("Error analyzing text:", error);
+      setError("Failed to analyze document for books");
+      setBookDetails("");
     }
-  }
+  };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Resume Analyzer</h1>
-      <p className={styles.subtitle}>Upload your resume and job description to get personalized feedback</p>
+      <h1>PDF Book Finder</h1>
+      <p>Upload a PDF to detect mentioned books (analyzes first 3 pages)</p>
 
-      <div className={styles.uploadContainer}>
-        <label className={styles.uploadLabel}>
-          {resumeText ? "Resume Uploaded ✓" : "Upload Resume (PDF)"}
-          <input
-            type="file"
-            accept="application/pdf"
-            onChange={handleFileUpload}
-            className={styles.fileInput}
-            disabled={loading}
-          />
-        </label>
+      <div className={styles.uploadSection}>
+        <input
+          type="file"
+          accept="application/pdf"
+          onChange={handleFileUpload}
+          disabled={loading}
+        />
+        {loading && <p>Analyzing document for books...</p>}
+        {error && <p className={styles.error}>{error}</p>}
       </div>
 
-      <div className={styles.textColumns}>
-        <div className={styles.column}>
-          <h3 className={styles.sectionTitle}>Resume Content</h3>
-          <textarea
-            className={styles.textArea}
-            value={resumeText}
-            rows={10}
-            placeholder="Extracted resume text will appear here..."
-            readOnly
-          />
-        </div>
-
-        <div className={styles.column}>
-          <h3 className={styles.sectionTitle}>Job Description</h3>
-          <textarea
-            className={styles.textArea}
-            value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
-            rows={10}
-            placeholder="Paste the job description here..."
-            disabled={loading}
-          />
-        </div>
-      </div>
-
-      <button
-        className={`${styles.analyzeButton} ${loading ? styles.loading : ""}`}
-        onClick={analyzeResume}
-        disabled={loading || !resumeText || !jobDescription}
-      >
-        {loading ? (
-          <span className={styles.spinner}></span>
-        ) : (
-          "Analyze Resume"
-        )}
-      </button>
-
-      {analysis && (
-        <div className={styles.analysisContainer}>
-          <h2 className={styles.analysisTitle}>Analysis Results</h2>
-          <div className={styles.analysisContent}>
-            {analysis.split('\n\n').map((paragraph, i) => (
-              <p key={i} className={styles.analysisParagraph}>
-                {paragraph}
-              </p>
+      {bookDetails && (
+        <div className={styles.bookSection}>
+          <h3>Detected Books:</h3>
+          <div className={styles.bookDetails}>
+            {bookDetails.split('\n').map((line, i) => (
+              <p key={i}>{line}</p>
             ))}
           </div>
         </div>

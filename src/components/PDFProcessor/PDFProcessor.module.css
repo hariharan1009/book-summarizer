@@ -1,142 +1,38 @@
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .title {
-    font-size: 2.5rem;
-    color: #2d3748;
-    margin-bottom: 0.5rem;
-    text-align: center;
-  }
-  
-  .subtitle {
-    font-size: 1.1rem;
-    color: #4a5568;
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  .uploadContainer {
-    margin-bottom: 2rem;
-    text-align: center;
-  }
-  
-  .uploadLabel {
-    display: inline-block;
-    padding: 1rem 2rem;
-    background-color: #4299e1;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    font-weight: 500;
-  }
-  
-  .uploadLabel:hover {
-    background-color: #3182ce;
-  }
-  
-  .fileInput {
-    display: none;
-  }
-  
-  .textColumns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 2rem;
-  }
-  
-  .column {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .sectionTitle {
-    font-size: 1.25rem;
-    color: #2d3748;
-    margin-bottom: 0.75rem;
-  }
-  
-  .textArea {
-    flex: 1;
-    padding: 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-    line-height: 1.5;
-    resize: none;
-    background-color: #f8fafc;
-  }
-  
-  .textArea:focus {
-    outline: none;
-    border-color: #4299e1;
-    box-shadow: 0 0 0 1px #4299e1;
-  }
-  
-  .analyzeButton {
-    display: block;
-    width: 100%;
-    padding: 1rem;
-    background-color: #48bb78;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin-bottom: 2rem;
-  }
-  
-  .analyzeButton:hover {
-    background-color: #38a169;
-  }
-  
-  .analyzeButton:disabled {
-    background-color: #a0aec0;
-    cursor: not-allowed;
-  }
-  
-  .loading {
-    position: relative;
-  }
-  
-  .spinner {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: white;
-    animation: spin 1s ease-in-out infinite;
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  .analysisContainer {
-    background-color: #edf2f7;
-    border-radius: 8px;
-    padding: 2rem;
-  }
-  
-  .analysisTitle {
-    font-size: 1.5rem;
-    color: #2d3748;
-    margin-bottom: 1rem;
-  }
-  
-  .analysisContent {
-    line-height: 1.6;
-  }
-  
-  .analysisParagraph {
-    margin-bottom: 1rem;
-    color: #4a5568;
-  }
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.uploadSection {
+  margin: 20px 0;
+  padding: 15px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.error {
+  color: #d32f2f;
+  margin-top: 10px;
+}
+
+.bookSection {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.bookDetails {
+  padding: 10px;
+  background: #fff9e6;
+  border-left: 4px solid #ffd700;
+  line-height: 1.6;
+}
+
+.h3 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
