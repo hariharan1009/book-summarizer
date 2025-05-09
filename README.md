@@ -1,4 +1,4 @@
-# BOOK Processor
+# BOOK Summarize
 
 This project provides tools for processing and analyzing book-related content within PDF documents. Currently, it includes the following functionalities:
 
