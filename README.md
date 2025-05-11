@@ -6,6 +6,8 @@ This project provides tools for processing and analyzing book-related content wi
 
 * **Extract Text and Summarize:** Extracts text content from the first three pages of a PDF file and prepares it for summarization .
 * **Book Finder by Name:** Detects and identifies mentioned book titles within a given PDF document.
+## Deployment link
+https://book-summarizer-sand.vercel.app
 
 ## Getting Started
 
