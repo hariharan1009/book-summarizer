@@ -1,34 +1,16 @@
-/* Root Variables */
-:root {
-  --primary: #4f46e5;
-  --primary-light: #6366f1;
-  --primary-dark: #4338ca;
-  --text-main: #1f2937;
-  --text-secondary: #4b5563;
-  --text-tertiary: #6b7280;
-  --bg-light: #f9fafb;
-  --bg-card: #ffffff;
-  --border-light: #e5e7eb;
-  --border-focus: #a5b4fc;
-  --error-light: #fee2e2;
-  --error-dark: #ef4444;
-  --success-light: #dcfce7;
-  --success-dark: #22c55e;
-}
-
-/* General Layout */
+/* BookSummary.module.css */
 .container {
   max-width: 700px;
   margin: 2rem auto;
   padding: 1.5rem;
   font-family: 'Inter', system-ui, sans-serif;
-  color: var(--text-main);
+  color: #1f2937;
 }
 
 /* Headings */
 .h1 {
   text-align: center;
-  color: var(--text-main);
+  color: #1f2937;
   margin-bottom: 0.75rem;
   font-size: 2rem;
   font-weight: 700;
@@ -37,7 +19,7 @@
 
 .subtitle {
   text-align: center;
-  color: var(--text-secondary);
+  color: #4b5563;
   margin-bottom: 2.5rem;
   font-size: 1rem;
   line-height: 1.5;
@@ -48,11 +30,11 @@
 
 /* Input Section */
 .inputSection {
-  background: var(--bg-light);
+  background: #f9fafb;
   padding: 2rem;
   border-radius: 16px;
   margin-bottom: 2.5rem;
-  border: 1px solid var(--border-light);
+  border: 1px solid #e5e7eb;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
@@ -65,18 +47,18 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: #4b5563;
   font-size: 0.95rem;
 }
 
 .formGroup input {
   width: 100%;
   padding: 0.9rem 1rem;
-  border: 1px solid var(--border-light);
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
   font-size: 1rem;
   transition: all 0.2s ease;
-  background-color: var(--bg-card);
+  background-color: white;
 }
 
 .formGroup input:hover {
@@ -85,14 +67,13 @@
 
 .formGroup input:focus {
   outline: none;
-  border-color: var(--primary-light);
+  border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-  background-color: var(--bg-card);
 }
 
 /* Buttons */
 .submitButton {
-  background: var(--primary);
+  background: #4f46e5;
   color: white;
   padding: 1rem;
   border: none;
@@ -100,22 +81,13 @@
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: all 0.2s ease;
   width: 100%;
   margin-top: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
 }
 
 .submitButton:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-}
-
-.submitButton:active {
-  transform: translateY(0);
+  background: #4338ca;
 }
 
 .submitButton:disabled {
@@ -124,35 +96,31 @@
 }
 
 /* Alerts */
-.error, .success {
+.error {
+  color: #ef4444;
   margin-top: 1.25rem;
   padding: 1rem;
+  background: #fee2e2;
   border-radius: 10px;
   font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.error {
-  color: var(--error-dark);
-  background: var(--error-light);
-  border-left: 4px solid var(--error-dark);
+  border-left: 4px solid #ef4444;
 }
 
 .success {
-  color: var(--success-dark);
-  background: var(--success-light);
-  border-left: 4px solid var(--success-dark);
+  color: #22c55e;
+  margin-top: 1.25rem;
+  padding: 1rem;
+  background: #dcfce7;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  border-left: 4px solid #22c55e;
 }
 
 /* Loading Spinner */
 .loading {
   text-align: center;
   margin: 2.5rem 0;
-  color: var(--text-secondary);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  color: #4b5563;
 }
 
 .spinner {
@@ -161,7 +129,7 @@
   height: 2.5rem;
   border: 4px solid rgba(79, 70, 229, 0.1);
   border-radius: 50%;
-  border-top-color: var(--primary);
+  border-top-color: #4f46e5;
   animation: spin 1s linear infinite;
 }
 
@@ -171,21 +139,21 @@
 
 /* Summary Section */
 .summarySection {
-  background: var(--bg-card);
+  background: white;
   padding: 2.25rem;
   border-radius: 16px;
-  border: 1px solid var(--border-light);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .highlight {
-  color: var(--primary);
+  color: #4f46e5;
   font-weight: 600;
 }
 
 .summaryText {
   line-height: 1.75;
-  color: var(--text-main);
+  color: #1f2937;
   margin: 1.75rem 0;
   font-size: 1.05rem;
 }
@@ -196,27 +164,18 @@
 
 .copyButton {
   background: #eef2ff;
-  color: var(--primary);
+  color: #4f46e5;
   padding: 0.75rem 1.25rem;
   border: none;
   border-radius: 8px;
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  transition: all 0.2s ease;
 }
 
 .copyButton:hover {
   background: #e0e7ff;
-  transform: translateY(-1px);
-}
-
-.copyButton:active {
-  transform: translateY(0);
 }
 
 /* Responsive Adjustments */
@@ -224,72 +183,33 @@
   .container {
     padding: 1rem;
   }
-
+  
   .inputSection,
   .summarySection {
     padding: 1.5rem;
   }
-
+  
   .h1 {
     font-size: 1.75rem;
   }
 }
-/* Stylish Buttons */
+
+/* Modern Enhancements */
 .submitButton {
-  background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
-  color: white;
-  padding: 1rem;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  width: 100%;
-  margin-top: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  background: linear-gradient(135deg, #6366f1, #4338ca);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .submitButton:hover {
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.submitButton:active {
-  transform: scale(1);
-}
-
-.submitButton:disabled {
-  background: #c7d2fe;
-  cursor: not-allowed;
-}
-
-/* Modern Box Styling */
 .inputSection, .summarySection {
-  background: rgba(255, 255, 255, 0.7);
-  padding: 2rem;
-  border-radius: 16px;
-  margin-bottom: 2.5rem;
-  border: 1px solid var(--border-light);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
-/* Hover Effect for Boxes */
 .inputSection:hover, .summarySection:hover {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
- /* BookSummary.module.css */
-.container {
-  --primary: #4f46e5;
-  --primary-light: #6366f1;
-  /* other variables... */
-  
-  /* Then use them */
-  background-color: var(--bg-light);
-  color: var(--text-main);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
