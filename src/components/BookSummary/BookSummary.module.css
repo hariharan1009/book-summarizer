@@ -283,4 +283,13 @@
 .inputSection:hover, .summarySection:hover {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
- 
+ /* BookSummary.module.css */
+.container {
+  --primary: #4f46e5;
+  --primary-light: #6366f1;
+  /* other variables... */
+  
+  /* Then use them */
+  background-color: var(--bg-light);
+  color: var(--text-main);
+}

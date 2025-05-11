@@ -14,7 +14,7 @@ export default function Home() {
 
         <Link href="/Bookname" className={styles.card}>
           <h2>Book Finder by Name <span className={styles.arrow}>&rarr;</span></h2>
-          <p>Detect and analyze books mentioned in your PDF.</p>
+          <p>Detect and analyze books .</p>
         </Link>
       </div>
     </div>
