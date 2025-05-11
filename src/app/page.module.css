@@ -3,45 +3,84 @@
   padding: 4rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .title {
-  margin: 0 0 2rem;
-  line-height: 1.15;
-  font-size: 3rem;
-  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #2d3748;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: #4a5568;
+  margin-bottom: 3rem;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  margin-top: 2rem;
 }
 
 .card {
-  padding: 1.5rem;
-  border-radius: 10px;
-  background: #f5f5f5;
-  transition: all 0.2s ease;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: left;
   text-decoration: none;
   color: inherit;
-  border: 1px solid #eaeaea;
+  border: 1px solid #e2e8f0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  background: #fff;
 }
 
 .card h2 {
-  margin: 0 0 1rem;
   font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #1a365d;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .card p {
   margin: 0;
-  opacity: 0.8;
   font-size: 1rem;
+  color: #4a5568;
   line-height: 1.5;
+}
+
+.arrow {
+  color: #4299e1;
+  font-weight: bold;
+}
+/* ... (keep .container, .grid, etc. same as above) ... */
+
+.title {
+  color: #5b21b6; /* Deep purple */
+}
+
+.subtitle {
+  color: #6b7280;
+}
+
+.card:hover {
+  box-shadow: 0 10px 20px rgba(124, 58, 237, 0.1); /* Purple-tinted shadow */
+  border-color: #c4b5fd; /* Light purple border */
+}
+
+.card h2 {
+  color: #7c3aed; /* Vibrant purple */
+}
+
+.arrow {
+  color: #f97316; /* Coral accent */
 }

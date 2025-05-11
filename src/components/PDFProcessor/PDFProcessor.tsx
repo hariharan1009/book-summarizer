@@ -12,6 +12,7 @@ export default function PDFBookFinder() {
   const [bookDetails, setBookDetails] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const groq = new Groq({
     apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY,
@@ -25,6 +26,7 @@ export default function PDFBookFinder() {
     setLoading(true);
     setError("");
     setBookDetails("");
+    setCopied(false);
 
     try {
       const textContent = await extractTextFromPDF(file);
@@ -71,13 +73,13 @@ export default function PDFBookFinder() {
   const analyzeTextForBooks = async (text: string) => {
     try {
       // Truncate text if too long to avoid API limits
-      const truncatedText = text.length > 2000 ? text.substring(0, 2000) + "..." : text;
+      const truncatedText = text.length > 2000 ? text.substring(0, 4000) + "..." : text;
       
       const response = await groq.chat.completions.create({
         messages: [
           {
             role: "system",
-            content: "You are a book detection assistant. Analyze the provided text and identify any mentioned books. For each book found, provide: 1.Book name, 2.Author, 3.description (1000 words), Format your response clearly with bullet points and ** without this."
+            content: "You are a book detection assistant. Analyze the provided text and identify any mentioned books. For each book found, provide the following information:\n\n- Book Name: [Book's Name]\n- Author: [Author's Name]\n- Description: [A concise description of the book (up to 1000 words)] Cover main themes, key ideas, and why it's significant.Use clear paragraphsremove the * from response\n\nFormat your response as plain text using bullet points as shown above. Do not use any bold text or special symbols.",
           },
           {
             role: "user",
@@ -97,10 +99,21 @@ export default function PDFBookFinder() {
     }
   };
 
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(bookDetails)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
+  };
+
   return (
     <div className={styles.container}>
       <h1>PDF Book Finder</h1>
-      <p>Upload a PDF to detect mentioned books (analyzes first 3 pages)</p>
+      <p>Upload a PDF to summarize books.</p>
 
       <div className={styles.uploadSection}>
         <input
@@ -115,12 +128,22 @@ export default function PDFBookFinder() {
 
       {bookDetails && (
         <div className={styles.bookSection}>
-          <h3>Detected Books:</h3>
+          <div className={styles.sectionHeader}>
+            <h3>Summarized Books:</h3>
+            
+          </div>
           <div className={styles.bookDetails}>
             {bookDetails.split('\n').map((line, i) => (
               <p key={i}>{line}</p>
             ))}
           </div>
+          <button 
+              onClick={copyToClipboard} 
+              className={styles.copyButton}
+              disabled={copied}
+            >
+              {copied ? 'Copied!' : 'Copy Text'}
+            </button>
         </div>
       )}
     </div>
